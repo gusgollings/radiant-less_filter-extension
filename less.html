@@ -1,0 +1,167 @@
+<p>Start with <a href="#variables">'variables'</a> - 
+<em>from <a href="http://lesscss.org/docs.html">http://lesscss.org/docs.html</a></em></p>
+
+<h1>
+  1. Installation
+</h1>
+<p>
+  LESS is an extension to CSS. You can write LESS files just like you would write CSS, except you need to compile them to CSS. That's what the gem is for.
+</p>
+<p>
+  If you have ruby and ruby-gems, you can install the gem by typing the following command in your shell:
+</p>
+<p>
+  <code class="cl">sudo gem install less</code>
+</p>
+<p>
+  If you need help installing ruby please check out the <a href="http://www.ruby-lang.org/en/">official Ruby site</a> for more details.
+</p>
+<p>
+  <br>
+</p>
+<h1>
+  2. Using the gem
+</h1>
+<p>
+  You can use the gem from your command line, or from within ruby. The command-line tool is called "lessc" and it looks like this:
+</p>
+<p>
+  <code class="cl">lessc [LESS file] [CSS file]</code>
+</p>
+<p>
+  You don't have to specify the name of the CSS file, though—lessc will use the same name as your LESS file, and swap the extension.
+</p>
+<p>
+  <code class="cl">lessc style.less</code> <code class="cl">lessc style.less stylesheet.css</code>
+</p>
+<p>
+  This will compile 'style.less' to 'stylesheet.css'
+</p>
+<p>
+  Ok, but won't it get tedious to constantly have to compile your updated LESS file to CSS? Sure, lessc comes with an option to watch for changes in your .less file, and compile it to css as soon as you save it:
+</p>
+<p>
+  <code class="cl">lessc style.less --watch</code>
+</p>
+<p>
+  Now whenever you update 'style.less', the LESS compiler will generate a new 'style.css' file in the same folder. If the compiler detects any errors, it will stop the process and highlight the error in the terminal to help you fix it.
+</p>
+<p>
+  In ruby, you can invoke the LESS compiler like so:
+</p>
+<p>
+  <code>require 'less'<br>
+  Less::Engine.new("a { color: 1 + 1 }").to_css</code>
+</p>
+<p>
+  Which will output:
+</p>
+<p>
+  <code>a { color: 2; }</code><br>
+</p>
+<h1>
+  3. LESS Features
+</h1>
+<p>
+  <a name="variables" id="variables"></a>
+</p>
+<h2>
+  3.1 Variables
+</h2>
+<p>
+  Variables allow you to set a value in one place, and then re-use it across your whole style sheet. This allows you to then modify the value in that one place and have it take effect across the rest of the style sheet. Here's how you define a variable:
+</p>
+<p>
+  <code>@nice-blue: #5B83AD;</code>
+</p>
+<p>
+  The variable '@nice_blue' is now assigned the value of '#5B83AD', which is a blue color. Of course you can assign anything else in there, like percentages or pixels. To use this variable in the rest of the style sheet simply include it in the right place, so for example, if we're setting the background-color of a header and we want to use the '@nice_blue' color, we do:
+</p>
+<p>
+  <code>#header { background-color: @nice-blue; }</code><br>
+  <a name="mixins" id="mixins"></a>
+</p>
+<h2>
+  3.2 Mixins
+</h2>
+<p>
+  Mixins are classes that you can embed into other classes or other selectors, and those selectors will take all the properties of that class. So for example, we have a class called 'bordered' that looks like this:
+</p>
+<p>
+  <code>.bordered {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;border-top: solid 1px #000;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;border-bottom: solid 1px #000;<br>
+  }</code>
+</p>
+<p>
+  Now, suppose we want another selector to take on all the properties of this class, which in this case would be a top and bottom border. All we need to do is drop that class into a list of its properties. So let's mix in the class 'bordered' into '#header':
+</p>
+<p>
+  <code>#header {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;.bordered;<br>
+  }</code>
+</p>
+<p>
+  The '#header' element will now have a top and bottom border from the '.bordered' class.
+</p>
+<p>
+  <br>
+  <a name="nested_rules" id="nested_rules"></a>
+</p>
+<h2>
+  3.3 Nested rules
+</h2>
+<p>
+  Nested rules help better structure the style sheet when it comes to inheritance. Instead of building long selectors to show inheritance, you can nest one selector inside another. Let's see an example. Suppose we're styling the '#navigation' div inside a '#header' div. Our CSS code could look like this:
+</p>
+<pre>
+#header { color: black; }
+#header .navigation {
+    font-size: 12px;
+}
+#header .logo { 
+    width: 300px; 
+}
+</pre>
+<p>
+  With LESS, we can simplify this by nesting the code for '#navigation' directly inside '#header'. The LESS code would then look like this:
+</p>
+<pre>
+#header {
+    color: black;
+    .navigation {
+        font-size: 12px;
+    }
+    .logo {
+        width: 300px;
+    }
+}
+</pre>
+<p>
+  <br>
+  <a name="operations" id="operations"></a>
+</p>
+<h2>
+  3.4 Operations
+</h2>
+<p>
+  Operations are simple. You can divide, multiply, add or subtract things in LESS. So lets see a typical example:
+</p>
+<p>
+  <code>border-top: @main_border_width - 1px;</code>
+</p>
+<p>
+  Whatever width the '@main_border_width' is set to, the border above will be 1 pixel thinner. This allows you to build a style sheet where many of the elements are set in relation to other elements, making global modifications very easy.
+</p>
+<p>
+  Here are a couple other examples
+</p>
+<pre>
+color: #fff / 4;
+background-color: @base-color + #111;
+height: 100% / 2 + @filler;
+</pre>
+<div id="footer">
+  Copyright © 2009 Alexis Sellier and Dmitry Fadeyev<br>
+  LESS is open source under the Apache License.
+</div>
